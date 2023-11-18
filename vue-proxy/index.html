@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vue-proxy</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    var name = 'W'
+    !(function() {
+      if(typeof name === 'undefined') {
+        var name = 'J'
+        console.log('goodbye' + name)
+      } else {
+        console.log('hello' + name)
+      }
+    })()
+
+    var user={
+      count: 1,
+      getCount() {
+        return this.count
+      }
+    }
+    var func = user.getCount
+    console.log(func(), 'getcount')
+  </script>
+  <!-- html 使用import要加type="module", 还需要启动一个本地服务器 -->
+  <script type="module">
+    import {reactive} from './reactive.js'
+    import{effect} from './effect.js'
+    const user = reactive({
+      name: 'QQQ',
+      age: 18,
+      foo:{
+        bar: 'bar'
+      }
+    })
+    effect(() => {
+      document.querySelector('#app').innerText = `${user.name} - ${user.age} - ${user.foo.bar}`
+    })
+    setTimeout(() => {
+      user.name = 'BOB'
+      user.age = 19
+      setTimeout(() => {
+        user.age += 1
+        setTimeout(() => {
+          user.foo.bar = '6666'
+        }, 1000)
+      }, 1000)
+    }, 2000)
+  </script>
+</body>
+</html>

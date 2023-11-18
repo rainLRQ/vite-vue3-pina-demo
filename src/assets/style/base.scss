@@ -1,0 +1,62 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+}
+html, body, #app, .layout-container {
+  height: 100%;
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
+}
+ /** sample media query for pixel-ratio=2" **/
+ @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .pixel-ratio-holder:before {
+    content: "2";
+   }
+ }
+//  function jsPixelRatio(){
+//   return window.getComputedStyle(document.querySelector('.pixel-ratio-holder'), 'before').getPropertyValue('content').replace(/[^az]/g,'') * 1;
+// }
+
+// scss函数
+$attr: (
+  (theme: 'dark', size: 40px),
+  (theme: 'light', size: 32px)
+);
+@for $i from 1 through length($attr) {
+  $item: nth($attr,$i);
+  .#{map-get($item, theme)} {
+    width: map-get($item, size);
+    height: map-get($item, size);
+  }
+}
+
+// @mixin 不带参数
+@mixin flex-center {
+  display: flex;
+}
+//  带参数
+@mixin flex($justify, $alignItem) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $alignItem;
+}
+// @mixin 参数不确定 用...
+@mixin shadow ($shadow) {
+  box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  -webkit-box-shadow: $shadow;
+}
+.aa {
+  @include flex-center();
+  @include flex(center, center);
+  @include shadow(2px 2px 2px pink)
+}
+
+// extend
+// 继承目标选择器的所有相关样式
+// 用!optional直接跳过空样式, 防止继承不存在的样式出错
+.bb {
+  @extend .aa!optional; //
+}

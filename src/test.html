@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+    // 将扁平数组转换成多层级数组或者对象
+    // 先找出顶级对象一个或者多个放入数组中，再递归遍历填入children
+    const arr = [
+  {name: '浙江省', fid: '0', id: '01'},
+  {name: '杭州市', fid: '01', id: '011'},
+  {name: '滨江区', fid: '011', id: '0111'},
+  {name: '西湖区', fid: '011', id: '0112'},
+  {name: '金华市', fid: '01', id: '012'},
+  {name: '婺城区', fid: '012', id: '0121'},
+  {name: '河南省', fid: '0', id: '02'},
+  {name: '河北省', fid: '0', id: '03'},
+  {name: '湖南省', fid: '0', id: '04'},
+  {name: '湖北省', fid: '0', id: '05'},
+  {name: '郑州市', fid: '02', id: '021'},
+]
+
+const transFun = (list) => {
+  const res = []
+  let len = list.length
+  // 在整个数组中，某一项的fid没有对应的id相匹配，说明是顶级的元素
+  // 找出顶级节点对象，放入res
+  for(let i = 0; i < len; i ++) {
+    let it1 = list[i]
+    if(list.every((li, idx) => li.id !== it1.fid)) {
+      res.push(it1)
+    }
+  }
+
+
+  // 递归遍历填充子节点
+  const deep = (res, list) => {
+    res.forEach(re => {
+      list.forEach((li) => {
+        if(li.fid === re.id) {
+          if(!re.children) re.children = []
+          re.children.push(li)
+        }
+      })
+      // 循环结束后children已全部拿到，这个时候再遍历children，填充子节点即可
+      if(re.children) deep(re.children, list)
+    })
+  }
+  deep(res, list)
+  return res
+  
+}
+console.log(transFun(arr))
+
+  </script>
+</body>
+</html>
